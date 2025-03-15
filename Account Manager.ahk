@@ -1,4 +1,4 @@
-; ==============================================================
+﻿; ==============================================================
 ; OWNED BY LOLZZN
 ; WARNING: UNAUTHORIZED MODIFICATION IS PROHIBITED  
 ;  
@@ -536,6 +536,7 @@ Gui1Close:
 if (GetKeyState("Esc", "P")) {
 return
 }
+process, close, %pid%
 gosub DeleteCache
 exitapp
 return

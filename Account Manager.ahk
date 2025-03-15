@@ -1,4 +1,4 @@
-﻿; ==============================================================
+; ==============================================================
 ; OWNED BY LOLZZN
 ; WARNING: UNAUTHORIZED MODIFICATION IS PROHIBITED  
 ;  
@@ -29,7 +29,7 @@ gui, e:font, cFFFFFF s15 q2 w800, Tahoma
 gui, e:add, text, x200 y10, License Agreements
 gui, e:add, groupbox, x0 y35 w600 h665 vnoselect,
 gui, e:font, cFFFFFF s9 q2 w400, Tahoma
-gui, e:add, edit, x20 y60 w560 h550 ReadOnly, % LicenseText
+gui, e:add, edit, x20 y60 w560 h550 ReadOnly, % LicenseText "`n---------------------------------`nYou must agree to proceed."
 gui, e:font, cFFFFFF s12 q2 w800, Tahoma
 gui, e:add, checkbox, x20 y620 gIReadAndAgreeToIt vCheckToAgree, I have read and agree to the terms
 gui, e:font, cFFFFFF s15 q2 w800, Tahoma
@@ -583,7 +583,6 @@ CheckMutexExist(mutexName) {
     return mutexHandle
 }
 
-
 LicenseText() {
 return "
 (
@@ -661,8 +660,5 @@ This software is created and owned by **Lolzzn** and is provided **for free use*
 **For authorization requests or reporting violations, contact: ** 
 **Email:** nilavian02@gmail.com
 **Official Website/Discord Server:** https://discord.gg/mangos
-
----------------------------------
-You must agree to proceed.
 )"
 }

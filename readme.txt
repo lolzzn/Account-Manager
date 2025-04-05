@@ -1,7 +1,5 @@
 This Account Manager is made by Lolzzn, With the help of Lunar for Multi-Instance and Yato for giving me gui ideas.
 
-This Account Manager Doesn't contain any malware. If your antivirus is detecting it has virus, it's a false-positive because the rMultiThreader is compiled.
-
 
 
 HOW DOES IT WORK?

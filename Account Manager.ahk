@@ -1,4 +1,4 @@
-﻿; ==============================================================
+; ==============================================================
 ; OWNED BY LOLZZN
 ; WARNING: UNAUTHORIZED MODIFICATION IS PROHIBITED  
 ;  
@@ -22,28 +22,28 @@ Menu, Tray, Icon, Account Manager Icon.ico
 OnMessage(0x201, "WM_LBUTTONDOWN")
 
 if (!FileExist("License_Agreed.md")) {
-LicenseText := LicenseText()
-gui, e:new, +hwndHere5 +LabelGui5 -alwaysontop -maximizebox
-gui, e:color, 3b3b3b, 3b3b3b
-gui, e:font, cFFFFFF s15 q2 w800, Tahoma
-gui, e:add, text, x200 y10, License Agreements
-gui, e:add, groupbox, x0 y35 w600 h665 vnoselect,
-gui, e:font, cFFFFFF s9 q2 w400, Tahoma
-gui, e:add, edit, x20 y60 w560 h550 ReadOnly, % LicenseText "`n---------------------------------`nYou must agree to proceed."
-gui, e:font, cFFFFFF s12 q2 w800, Tahoma
-gui, e:add, checkbox, x20 y620 gIReadAndAgreeToIt vCheckToAgree, I have read and agree to the terms
-gui, e:font, cFFFFFF s15 q2 w800, Tahoma
-gui, e:add, button, disabled x25 y650 w150 gAgree vAgreedBTTR, Agree
-gui, e:add, button, x200 y650 w150 gDecline, Decline
-gui, e:show, w600 h700, Account Manager License Agreement
-guicontrol, e:focus, noselect
-return
+	LicenseText := LicenseText()
+	gui, e:new, +hwndHere5 +LabelGui5 -alwaysontop -maximizebox
+	gui, e:color, 3b3b3b, 3b3b3b
+	gui, e:font, cFFFFFF s15 q2 w800, Tahoma
+	gui, e:add, text, x200 y10, License Agreements
+	gui, e:add, groupbox, x0 y35 w600 h665 vnoselect,
+	gui, e:font, cFFFFFF s9 q2 w400, Tahoma
+	gui, e:add, edit, x20 y60 w560 h550 ReadOnly, % LicenseText "`n---------------------------------`nYou must agree to proceed."
+	gui, e:font, cFFFFFF s12 q2 w800, Tahoma
+	gui, e:add, checkbox, x20 y620 gIReadAndAgreeToIt vCheckToAgree, I have read and agree to the terms
+	gui, e:font, cFFFFFF s15 q2 w800, Tahoma
+	gui, e:add, button, disabled x25 y650 w150 gAgree vAgreedBTTR, Agree
+	gui, e:add, button, x200 y650 w150 gDecline, Decline
+	gui, e:show, w600 h700, Account Manager License Agreement
+	guicontrol, e:focus, noselect
+	return
 }
 
 
 TheStartOfTheCode:
 if (!FileExist("settings")) {
-fileappend,Chrome,settings
+	fileappend,Chrome,settings
 }
 
 gosub UpdateThemSettings
@@ -102,7 +102,9 @@ gui, d:font, cFFFFFF s12 q1 w800, Tahoma
 gui, d:add, groupbox, x2 y2 w196 h196
 gui, d:add, text, x25 y5, Browser Selection
 gui, d:add, DDL, x10 y30 vBrowserToUse gBrowserUse, Chrome | Opera
+
 guicontrol, d:choose, BrowserToUse, % Content[1]
+
 gui, d:font, CFFFFFF,
 gui, d:add, checkbox, x15 y100 GMultiThread VCheckbox11, <-- Multi Instance
 gui, d:add, groupbox, x10 y80 w180
@@ -111,7 +113,6 @@ gui, d:add, text, x15 y130, Multi-Instance made by
 gui, d:font, cBD89DC s10 q1 w400, Tahoma
 gui, d:add, text, x152 y130,  Lunar
 gui, d:font, cFFFFFF s12 q1 w800, Tahoma
-
 return
 
 LinkClicked:
@@ -122,24 +123,24 @@ StartTS:
 gui, a:submit, nohide
 AccountName := trim(AccountName)
 if (AccountName == "") {
-msgbox, 0x40030, ERROR, ENTER A VALID USERNAME!
-return
+	msgbox, 0x40030, ERROR, ENTER A VALID USERNAME!
+	return
 }
 if (RegExMatch(AccountName, "[^\w\s]")) {
-msgbox, 0x40030, ERROR, ENTER A VALID USERNAME!
-return
+	msgbox, 0x40030, ERROR, ENTER A VALID USERNAME!
+	return
 }
 ACCCLIST := ""
 loop, files, %A_ScriptDir%\%BrowserFName%\*.*, D
 {
-ACCCLIST .= A_LoopFileName "|"
+	ACCCLIST .= A_LoopFileName "|"
 }
 loop, parse, ACCCLIST, "|"
 {
-if (A_LoopField == AccountName) {
-msgbox, 0x40030, ERROR, USE A DIFFERENT USERNAME!
-return
-}
+	if (A_LoopField == AccountName) {
+		msgbox, 0x40030, ERROR, USE A DIFFERENT USERNAME!
+		return
+	}
 }
 Run, %ExeRun% --new-window --user-data-dir="%A_ScriptDir%\%BrowserFName%\%AccountName%" "https://roblox.com/login"
 sleep 1000
@@ -149,8 +150,8 @@ return
 Run2:
 gui, a:submit, nohide
 if (AccountList == "") {
-msgbox, 0x40030, ERROR?, You Haven't Selected The Account
-return
+	msgbox, 0x40030, ERROR?, You Haven't Selected The Account
+	return
 }
 AccountListSend(AccountList)
 return
@@ -161,9 +162,9 @@ CAccList := ""
 amountths := 0
 Loop, Files, %A_ScriptDir%\%BrowserFName%\*.*, D
 {
-	guicontrol, a:,AccountList, %A_LoopFileName%
-	CAccList .= A_LoopFileName "|"
-	amountths++
+		guicontrol, a:,AccountList, %A_LoopFileName%
+		CAccList .= A_LoopFileName "|"
+		amountths++
 }
 gui, f:font, cFFFFFF s15 q2 w800, Tahoma
 gui, f:add, text, x275 y457 vAmountAlt2, %amountths%
@@ -181,16 +182,16 @@ cGame := ""
 FileRead, GameIDSave, GameIDSaveD
 loop, parse, GameIDSave, `n
 {
-if (A_LoopField != "") {
-IHateCoding := strsplit(A_LoopField, ",")
-IDNow := trim(IHateCoding[1])
-GameNow := trim(IHateCoding[2])
-if (IDNow != "" or GameNow != "") {
-cID .= IDNow "|"
-cGame .= GameNow "|"
-}
-guicontrol, a:, GameIDList, %GameNow% (%IDNow%)
-}
+	if (A_LoopField != "") {
+		IHateCoding := strsplit(A_LoopField, ",")
+		IDNow := trim(IHateCoding[1])
+		GameNow := trim(IHateCoding[2])
+		if (IDNow != "" or GameNow != "") {
+			cID .= IDNow "|"
+			cGame .= GameNow "|"
+		}
+		guicontrol, a:, GameIDList, %GameNow% (%IDNow%)
+	}
 }
 return
 
@@ -208,20 +209,20 @@ Loop, Files, %A_ScriptDir%\%BrowserFName%\*.*, D
 	Loop, Files, %A_ScriptDir%\%BrowserFName%\%NameSave%\*.*, D
 	{
 		if (A_LoopFileName != "Default") {
-		math1++
+			math1++
 		}
 	}
 	Loop, Files, %A_ScriptDir%\%BrowserFName%\%NameSave%\Default\Extensions\*.*, D
 	{
-	math1++
+		math1++
 	}
 	Loop, Files, %A_ScriptDir%\%BrowserFName%\%NameSave%\Default\Cache\*.*, D
 	{
-	math1++
+		math1++
 	}
 	Loop, Files, %A_ScriptDir%\%BrowserFName%\%NameSave%\Default\Code Cache\*.*, D
 	{
-	math1++
+		math1++
 	}
 }
 progress := 100/math1
@@ -232,34 +233,34 @@ Loop, Files, %A_ScriptDir%\%BrowserFName%\*.*, D
 	Loop, Files, %A_ScriptDir%\%BrowserFName%\%NameSave%\*.*, D
 	{
 		if (A_LoopFileName != "Default") {
-		Cprogress := Cprogress
+			Cprogress := Cprogress
 			FileRemoveDir, %A_ScriptDir%\%BrowserFName%\%NameSave%\%A_LoopFileName%, 1
-		guicontrol, b:, progress, %Cprogress%
-		Cprogress := Cprogress + progress
+			guicontrol, b:, progress, %Cprogress%
+			Cprogress := Cprogress + progress
 		}
 	}
 	filedelete, %A_ScriptDir%\%BrowserFName%\%NameSave%\Default\Cache*.*
 	filedelete, %A_ScriptDir%\%BrowserFName%\%NameSave%\Default\Code Cache*.*
 	Loop, Files, %A_ScriptDir%\%BrowserFName%\%NameSave%\Default\Extensions\*.*, D
 	{
-	Cprogress := Cprogress
-	FileRemoveDir, %A_ScriptDir%\%BrowserFName%\%NameSave%\Default\Extensions\%A_LoopFileName%, 1
-	guicontrol, b:, progress, %Cprogress%
-	Cprogress := Cprogress + progress
+		Cprogress := Cprogress
+		FileRemoveDir, %A_ScriptDir%\%BrowserFName%\%NameSave%\Default\Extensions\%A_LoopFileName%, 1
+		guicontrol, b:, progress, %Cprogress%
+		Cprogress := Cprogress + progress
 	}
 	Loop, Files, %A_ScriptDir%\%BrowserFName%\%NameSave%\Default\Cache\*.*, D
 	{
-	Cprogress := Cprogress
-	FileRemoveDir, %A_ScriptDir%\%BrowserFName%\%NameSave%\Default\Cache\%A_LoopFileName%, 1
-	guicontrol, b:, progress, %Cprogress%
-	Cprogress := Cprogress + progress
+		Cprogress := Cprogress
+		FileRemoveDir, %A_ScriptDir%\%BrowserFName%\%NameSave%\Default\Cache\%A_LoopFileName%, 1
+		guicontrol, b:, progress, %Cprogress%
+		Cprogress := Cprogress + progress
 	}
 	Loop, Files, %A_ScriptDir%\%BrowserFName%\%NameSave%\Default\Code Cache\*.*, D
 	{
-	Cprogress := Cprogress
-	FileRemoveDir, %A_ScriptDir%\%BrowserFName%\%NameSave%\Default\Code Cache\%A_LoopFileName%, 1
-	guicontrol, b:, progress, %Cprogress%
-	Cprogress := Cprogress + progress	
+		Cprogress := Cprogress
+		FileRemoveDir, %A_ScriptDir%\%BrowserFName%\%NameSave%\Default\Code Cache\%A_LoopFileName%, 1
+		guicontrol, b:, progress, %Cprogress%
+		Cprogress := Cprogress + progress	
 	}
 }
 gui, b:destroy
@@ -269,16 +270,16 @@ return
 Delete:
 gui, a:submit, nohide
 if (AccountList == "") {
-msgbox, 0x40030, ERROR?, You Haven't Selected The Account
-return
+	msgbox, 0x40030, ERROR?, You Haven't Selected The Account
+	return
 }
 msgbox, 0x40034, Cautions, Are you sure? This action is irreversible.
 IfMsgBox Yes
 	{
 	FileRemoveDir, % A_ScriptDir . "\" . BrowserFName . "\" . AccountList, 1
 	if ErrorLevel {
-	msgbox, 0x40030, ERROR, YOU STILL HAVE THE ACCOUNT OPENED! PLEASE CLOSE THEM.
-	return
+		msgbox, 0x40030, ERROR, YOU STILL HAVE THE ACCOUNT OPENED! PLEASE CLOSE THEM.
+		return
 	}
 	gosub UpdateAccountList
 	}
@@ -290,7 +291,7 @@ gui,a:submit,nohide
 guicontrol,a:,AccountList, |
 loop, parse, CAccList, "|"
 {
-if (instr(A_LoopField, SearchBarACC))
+	if (instr(A_LoopField, SearchBarACC))
 	guicontrol,a:,AccountList, %A_LoopField%
 }
 return
@@ -308,18 +309,18 @@ for index, value in IDArr {
 }
 loop % NewIDArr.Length()
 {
-CurrentGame := % GAMEArr[A_Index] . " (" . IDArr[A_Index] . ")"
-if (instr(cID, GameSB2) or instr(cGame, GameSB2)) {
-guicontrol,a:,GameIDList, % CurrentGame
-}
+	CurrentGame := % GAMEArr[A_Index] . " (" . IDArr[A_Index] . ")"
+	if (instr(cID, GameSB2) or instr(cGame, GameSB2)) {
+		guicontrol,a:,GameIDList, % CurrentGame
+	}
 }
 return
 
 RenameAcc:
 gui, a:submit, nohide
 if (AccountList == "") {
-msgbox, 0x40030, ERROR?, You Haven't Selected The Account
-return
+	msgbox, 0x40030, ERROR?, You Haven't Selected The Account
+	return
 }
 gui, c:new, +hwndHere3 +LabelGui3 +alwaysontop -border
 gui, c:color, 3b3b3b, 3b3b3b
@@ -339,20 +340,20 @@ return
 RenameFun:
 gui, c:submit,nohide
 if (NewName == "") {
-msgbox, 0x40030, ERROR, ENTER A VALID USERNAME!
-return
+	msgbox, 0x40030, ERROR, ENTER A VALID USERNAME!
+	return
 }
 NewName := trim(NewName)
 if (RegExMatch(NewName, "[^\w\s]")) {
-msgbox, 0x40030, ERROR, ENTER A VALID USERNAME!
-return
+	msgbox, 0x40030, ERROR, ENTER A VALID USERNAME!
+	return
 }
 loop, parse, CAccList, "|"
 if (A_LoopField != "") {
-if (A_LoopField == NewName) {
-msgbox, 0x40030, ERROR, USE A DIFFERENT USERNAME!
-return
-}
+	if (A_LoopField == NewName) {
+		msgbox, 0x40030, ERROR, USE A DIFFERENT USERNAME!
+		return
+	}
 }
 FileMoveDir, %A_ScriptDir%\%BrowserFName%\%AccountList%, %A_ScriptDir%\%BrowserFName%\%NewName%, R
 gui, c:destroy
@@ -363,72 +364,72 @@ JoinGame:
 gui,a:submit,nohide
 gosub UpdateGameIDList
 if (AccountList == "") {
-msgbox, 0x40030, ERROR?, You Haven't Selected The Account
-return
+	msgbox, 0x40030, ERROR?, You Haven't Selected The Account
+	return
 }
 GameSB2 := trim(GameSB2)
 if (GameSB2 != "") {
-url := "https://www.roblox.com/games/" GameSB2
-html := GetPageSource(url)
-if (html == "ERROR") {
-return
-}
-if (RegExMatch(html, "data-place-name=""(.*?)""", match)) {
-gameName := match1
-if !(instr(cID, GameSB2)) {
-fileappend, % GameSB2 . ", " . gameName "`n", GameIDSaveD
-}
-RunningGameID(AccountList, GameSB2)
-gosub UpdateGameIDList
-return
-} else {
-if (GameIDList == "") {
-MsgBox, 0x40030, ERROR, CAN'T FIND THE GAME! INVALID ID'S
-return
+	url := "https://www.roblox.com/games/" GameSB2
+	html := GetPageSource(url)
+	if (html == "ERROR") {
+		return
+	}
+	if (RegExMatch(html, "data-place-name=""(.*?)""", match)) {
+		gameName := match1
+		if !(instr(cID, GameSB2)) {
+			fileappend, % GameSB2 . ", " . gameName "`n", GameIDSaveD
+		}
+		RunningGameID(AccountList, GameSB2)
+		gosub UpdateGameIDList
+		return
+		} else {
+		if (GameIDList == "") {
+		MsgBox, 0x40030, ERROR, CAN'T FIND THE GAME! INVALID ID'S
+		return
+		}else{
+			MsgBox, 0x40034, ERROR, CAN'T FIND THE GAME! INVALID ID'S!`nWould you want to launch the choosen game ID instead?
+			IfMsgBox, Yes
+			{
+				fileread, GameIDSave2, GameIDSaveD
+				loop, parse, GameIDSave2, `n
+				{
+					if (A_LoopField != "") {
+						FirstLine := strsplit(A_LoopField, ",")
+						FirstLine1 := trim(FirstLine[1])
+						if (instr(GameIDList, FirstLine1)) {
+							RunningGameID(AccountList, FirstLine1)
+							break
+						}
+					}
+				}
+			}
+		}
+	}
 }else{
-MsgBox, 0x40034, ERROR, CAN'T FIND THE GAME! INVALID ID'S!`nWould you want to launch the choosen game ID instead?
-IfMsgBox, Yes
-{
-fileread, GameIDSave2, GameIDSaveD
-loop, parse, GameIDSave2, `n
-{
-if (A_LoopField != "") {
-FirstLine := strsplit(A_LoopField, ",")
-FirstLine1 := trim(FirstLine[1])
-if (instr(GameIDList, FirstLine1)) {
-RunningGameID(AccountList, FirstLine1)
-break
-}
-}
-}
-}
-}
-}
-}else{
-if (GameIDList == "") {
-MsgBox, 0x40030, ERROR, PUT THE GAME ID/SELECT THE ID!
-return
-}
-fileread, GameIDSave2, GameIDSaveD
-loop, parse, GameIDSave2, `n
-{
-if (A_LoopField != "") {
-FirstLine := strsplit(A_LoopField, ",")
-FirstLine1 := trim(FirstLine[1])
-if (instr(GameIDList, FirstLine1)) {
-RunningGameID(AccountList, FirstLine1)
-break
-}
-}
-}
+	if (GameIDList == "") {
+		MsgBox, 0x40030, ERROR, PUT THE GAME ID/SELECT THE ID!
+		return
+	}
+	fileread, GameIDSave2, GameIDSaveD
+	loop, parse, GameIDSave2, `n
+	{
+		if (A_LoopField != "") {
+			FirstLine := strsplit(A_LoopField, ",")
+			FirstLine1 := trim(FirstLine[1])
+			if (instr(GameIDList, FirstLine1)) {
+				RunningGameID(AccountList, FirstLine1)
+			break
+			}
+		}
+	}
 }
 return
 
 DeleteGame:
 gui,a:submit,nohide
 if (GameIDList == "") {
-MsgBox, 0x40030, ERROR, PUT THE GAME ID/SELECT THE ID!
-return
+	MsgBox, 0x40030, ERROR, PUT THE GAME ID/SELECT THE ID!
+	return
 }
 FileRead, GameIDSave, GameIDSaveD
 FileDelete, GameIDSaveD
@@ -440,12 +441,12 @@ Loop % THISARR.MaxIndex()
 }
 loop % THISARR.MaxIndex()
 {
-aaa := strsplit(THISARR[A_Index], ",")
-ThisVal := trim(aaa[1])
-ThisVal2 := trim(aaa[2])
-if !(instr(GameIDList, ThisVal)) {
-fileappend, % ThisVal . ", " . ThisVal2 "`n", GameIDSaveD
-}
+	aaa := strsplit(THISARR[A_Index], ",")
+	ThisVal := trim(aaa[1])
+	ThisVal2 := trim(aaa[2])
+	if !(instr(GameIDList, ThisVal)) {
+		fileappend, % ThisVal . ", " . ThisVal2 "`n", GameIDSaveD
+	}
 }
 gosub UpdateGameIDList
 return
@@ -470,27 +471,26 @@ Content := strsplit(SettingsContent, "`n")
 Browser := % trim(Content[1])
 
 if (Browser != "Chrome" and Browser != "Opera") {
-filedelete, settings
-fileappend,Chrome,settings
-sleep 500
-reload
+	filedelete, settings
+	fileappend,Chrome,settings
+	sleep 500
+	reload
 }
 BrowserFName := "ChromeProfileSave"
 if (Browser == "Chrome") {
-ExeRun := "chrome.exe"
+	ExeRun := "chrome.exe"
 }
 if (Browser == "Opera") {
-ExeRun := "opera.exe"
+	ExeRun := "opera.exe"
 }
 return
 
 MultiThread:
 gui,d:submit,nohide
 if (Checkbox11 == 1) {
-run, rMultiThreader.exe,,, pid
-}else {
-process, close, %pid%
-
+	run, rMultiThreader.ahk
+} else {
+	closeahkscript("rMultiThreader.ahk")
 }
 return
 
@@ -513,9 +513,9 @@ return
 IReadAndAgreeToIt:
 gui,e:submit,nohide
 if (CheckToAgree == 1) {
-GuiControl, Enable, AgreedBTTR
+	GuiControl, Enable, AgreedBTTR
 }else{
-GuiControl, Disable, AgreedBTTR
+	GuiControl, Disable, AgreedBTTR
 }
 return
 ;==============================================================================
@@ -536,7 +536,7 @@ Gui1Close:
 if (GetKeyState("Esc", "P")) {
 return
 }
-process, close, %pid%
+closeahkscript("rMultiThreader.ahk")
 gosub DeleteCache
 exitapp
 return
@@ -579,9 +579,17 @@ return "ERROR"
 }
 }
 
-CheckMutexExist(mutexName) {
-    mutexHandle := DllCall("OpenMutex", "UInt", 0x1F0001, "Int", 0, "Str", mutexName, "Ptr")
-    return mutexHandle
+closeahkscript(name){
+DetectHiddenWindows On
+SetTitleMatchMode RegEx
+
+IfWinExist, i)%name%.* ahk_class AutoHotkey
+	{
+	WinClose
+	WinWaitClose, i)%name%.* ahk_class AutoHotkey, , 2
+	}
+	
+SetTitleMatchMode 2
 }
 
 LicenseText() {

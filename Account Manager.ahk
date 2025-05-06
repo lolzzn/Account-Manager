@@ -43,7 +43,11 @@ if (!FileExist("License_Agreed.md")) {
 
 TheStartOfTheCode:
 if (!FileExist("settings")) {
-	fileappend,Chrome,settings
+	fileappend,
+	(
+Chrome
+0
+	),settings
 }
 
 gosub UpdateThemSettings
@@ -92,7 +96,9 @@ gui, a:add, Listbox, x325 y65 w200 h58 vGameIDList,
 
 gosub UpdateAccountList
 gosub UpdateGameIDList
+if (StartupSettings == 1) {
 gosub DeleteCache
+}
 gui, a:show, w550 h490
 WinSet, AlwaysOnTop, On, ahk_id %Here%
 
@@ -106,12 +112,17 @@ gui, d:add, DDL, x10 y30 vBrowserToUse gBrowserUse, Chrome | Opera
 guicontrol, d:choose, BrowserToUse, % Content[1]
 
 gui, d:font, CFFFFFF,
-gui, d:add, checkbox, x15 y100 GMultiThread VCheckbox11, <-- Multi Instance
-gui, d:add, groupbox, x10 y80 w180
+gui, d:add, checkbox, x15 y70 GMultiThread VCheckbox11, <-- Multi Instance
+gui, d:add, groupbox, x10 y50 w180 h70
+gui, d:add, groupbox, x10 y115 w180 h77
 gui, d:font, cFFFFFF s10 q1 w400, Tahoma
-gui, d:add, text, x15 y130, Multi-Instance made by 
+gui, d:add, text, x15 y100, Multi-Instance made by 
+gui, d:add, checkbox, x15 y130 vstartupcc gUpdateStartup, <- Clear Cache on startup
+
+guicontrol, d:, startupcc, % StartupSettings
+
 gui, d:font, cBD89DC s10 q1 w400, Tahoma
-gui, d:add, text, x152 y130,  Lunar
+gui, d:add, text, x152 y100,  Lunar
 gui, d:font, cFFFFFF s12 q1 w800, Tahoma
 return
 
@@ -462,17 +473,37 @@ BrowserUse:
 gui, d:submit,nohide
 BrowserToUse := trim(BrowserToUse)
 filedelete, settings
-fileappend, % BrowserToUse, settings
+fileappend,
+(
+%BrowserToUse%
+%StartupSettings%
+), settings
 return
 
+UpdateStartup:
+gui, d:submit,nohide
+startupcc := trim(startupcc)
+BrowserToUse := trim(BrowserToUse)
+filedelete, settings
+fileappend,
+(
+%BrowserToUse%
+%startupcc%
+), settings
+
 UpdateThemSettings:
-fileread, SettingsContent, settings
+filereadline, SettingsContent, settings, 1
+filereadline, StartupSettings, settings, 2
 Content := strsplit(SettingsContent, "`n")
 Browser := % trim(Content[1])
 
 if (Browser != "Chrome" and Browser != "Opera") {
 	filedelete, settings
-	fileappend,Chrome,settings
+	fileappend,
+	(
+Chrome
+%StartupSettings%
+	),settings
 	sleep 500
 	reload
 }
@@ -482,6 +513,19 @@ if (Browser == "Chrome") {
 }
 if (Browser == "Opera") {
 	ExeRun := "opera.exe"
+}
+
+StartupSettings := % trim(StartupSettings)
+
+if (StartupSettings != "0" and StartupSettings != "1") {
+	filedelete, settings
+	fileappend,
+	(
+%SettingsContent%
+0
+	),settings
+	sleep 500
+	reload
 }
 return
 

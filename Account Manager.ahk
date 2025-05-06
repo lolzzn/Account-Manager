@@ -200,7 +200,7 @@ math1:=0
 gui, b:new, +hwndHere2 +LabelGui2 +alwaysontop -border
 gui, b:color, 3b3b3b
 gui, b:font, cwhite
-gui, b:add, text, x5 y10, Clearning Cache...
+gui, b:add, text, x5 y10, Clearing Cache...
 gui, b:add, progress, x5 y25 w200 h15 +border vprogress, 0
 gui, b:show
 Loop, Files, %A_ScriptDir%\%BrowserFName%\*.*, D

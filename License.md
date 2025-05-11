@@ -1,5 +1,5 @@
 # PROPRIETARY LICENSE AGREEMENT
-**Last Updated:** 14-03-2025 (DD-MM-YYYY) 
+**Last Updated:** 12-05-2025 (DD-MM-YYYY) 
 **Creator:** Lolzzn
 
 ## 1. GRANT OF LICENSE  
@@ -41,4 +41,4 @@ This software is created and owned by **Lolzzn** and is provided **for free use*
 ## 9. CONTACT INFORMATION  
 **For authorization requests or reporting violations, contact: ** 
 **Email:** nilavian02@gmail.com
-**Official Website/Discord Server:** https://discord.gg/mangos
+**Official Download Link:** https://discord.gg/mangos

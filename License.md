@@ -41,4 +41,4 @@ This software is created and owned by **Lolzzn** and is provided **for free use*
 ## 9. CONTACT INFORMATION  
 **For authorization requests or reporting violations, contact: ** 
 **Email:** nilavian02@gmail.com
-**Official Download Link:** https://discord.gg/mangos
+**Official Download Link:** https://github.com/lolzzn/Account-Manager/releases

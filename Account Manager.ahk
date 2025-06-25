@@ -127,7 +127,7 @@ gui, d:font, cFFFFFF s12 q1 w800, Tahoma
 return
 
 LinkClicked:
-run, https://discord.com/invite/mangos
+; run, https://discord.com/invite/mangos
 return
 
 StartTS:

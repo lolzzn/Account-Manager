@@ -47,11 +47,13 @@ if (!FileExist("settings")) {
 	(
 Chrome
 0
+1
 	),settings
 }
 
 gosub UpdateThemSettings
-
+IHateScriptingThis := []
+settimer, CheckingChromeAndRemovingIt, 1500
 gui, a:new, +hwndHere +LabelGui1 -alwaysontop -maximizebox
 gui, a:color, 3b3b3b, 3b3b3b
 
@@ -97,6 +99,7 @@ gui, a:add, Listbox, x325 y65 w200 h58 vGameIDList,
 gosub UpdateAccountList
 gosub UpdateGameIDList
 if (StartupSettings == 1) {
+type := 0
 gosub DeleteCache
 }
 gui, a:show, w550 h490
@@ -107,7 +110,7 @@ gui, d:color, 3b3b3b, 3b3b3b
 gui, d:font, cFFFFFF s12 q1 w800, Tahoma
 gui, d:add, groupbox, x2 y2 w196 h196
 gui, d:add, text, x25 y5, Browser Selection
-gui, d:add, DDL, x10 y30 vBrowserToUse gBrowserUse, Chrome | Opera
+gui, d:add, DDL, x10 y30 vBrowserToUse gUpdateTheGODDAMNSetting, Chrome | Opera
 
 guicontrol, d:choose, BrowserToUse, % Content[1]
 
@@ -117,9 +120,11 @@ gui, d:add, groupbox, x10 y50 w180 h70
 gui, d:add, groupbox, x10 y115 w180 h77
 gui, d:font, cFFFFFF s10 q1 w400, Tahoma
 gui, d:add, text, x15 y100, Multi-Instance made by 
-gui, d:add, checkbox, x15 y130 vstartupcc gUpdateStartup, <- Clear Cache on startup
+gui, d:add, checkbox, x15 y130 vstartupcc gUpdateTheGODDAMNSetting, <- Clear Cache on startup
+gui, d:add, checkbox, x15 y150 vsilentcacheremoval gUpdateTheGODDAMNSetting, <- Silent Cache Removal
 
 guicontrol, d:, startupcc, % StartupSettings
+guicontrol, d:, silentcacheremoval, % SilentCacheRmovlal
 
 gui, d:font, cBD89DC s10 q1 w400, Tahoma
 gui, d:add, text, x152 y100,  Lunar
@@ -208,7 +213,7 @@ return
 
 DeleteCache:
 math1:=0
-gui, b:new, +hwndHere2 +LabelGui2 +alwaysontop -border
+gui, b:new, +hwndHere2 +LabelGui2 -border +alwaysontop
 gui, b:color, 3b3b3b
 gui, b:font, cwhite
 gui, b:add, text, x5 y10, Clearing Cache...
@@ -275,7 +280,6 @@ Loop, Files, %A_ScriptDir%\%BrowserFName%\*.*, D
 	}
 }
 gui, b:destroy
-msgbox, 0x40040, Success, Cache deleted, 0.5
 return
 
 Delete:
@@ -469,31 +473,26 @@ y1y := y1y+100
 gui, d:show, x%x1x% y%y1y% w200 h200, Settings
 return
 
-BrowserUse:
+UpdateTheGODDAMNSetting:
 gui, d:submit,nohide
 BrowserToUse := trim(BrowserToUse)
-filedelete, settings
-fileappend,
-(
-%BrowserToUse%
-%StartupSettings%
-), settings
-return
-
-UpdateStartup:
-gui, d:submit,nohide
 startupcc := trim(startupcc)
-BrowserToUse := trim(BrowserToUse)
+silentcacheremoval := trim(silentcacheremoval)
 filedelete, settings
 fileappend,
 (
 %BrowserToUse%
 %startupcc%
+%silentcacheremoval%
 ), settings
+sleep 100
+gosub UpdateThemSettings
+return
 
 UpdateThemSettings:
 filereadline, SettingsContent, settings, 1
 filereadline, StartupSettings, settings, 2
+filereadline, SilentCacheRmovlal, settings, 3
 Content := strsplit(SettingsContent, "`n")
 Browser := % trim(Content[1])
 
@@ -503,6 +502,7 @@ if (Browser != "Chrome" and Browser != "Opera") {
 	(
 Chrome
 %StartupSettings%
+%SilentCacheRmovlal%
 	),settings
 	sleep 500
 	reload
@@ -523,6 +523,21 @@ if (StartupSettings != "0" and StartupSettings != "1") {
 	(
 %SettingsContent%
 0
+%SilentCacheRmovlal%
+	),settings
+	sleep 500
+	reload
+}
+
+SilentCacheRmovlal := % trim(SilentCacheRmovlal)
+
+if (SilentCacheRmovlal != "0" and SilentCacheRmovlal != "1") {
+	filedelete, settings
+	fileappend,
+	(
+%SettingsContent%
+%StartupSettings%
+1
 	),settings
 	sleep 500
 	reload
@@ -581,6 +596,7 @@ if (GetKeyState("Esc", "P")) {
 return
 }
 closeahkscript("rMultiThreader.ahk")
+type := 1
 gosub DeleteCache
 exitapp
 return
@@ -602,12 +618,18 @@ exitapp
 return
 AccountListSend(User) {
 global
-Run, %ExeRun% --new-window --user-data-dir="%A_ScriptDir%\%BrowserFName%\%User%" "https://roblox.com/"
+SaveNameLastSecond := % User "|"
+Run, %ExeRun% --new-window --user-data-dir="%A_ScriptDir%\%BrowserFName%\%User%" "https://roblox.com",,, User
+SaveNameLastSecond .= User
+IHateScriptingThis.push(SaveNameLastSecond)
 }
 
 RunningGameID(User, GMID) {
 global
-Run, %ExeRun% --new-window --user-data-dir="%A_ScriptDir%\%BrowserFName%\%User%" "https://www.roblox.com/games/%GMID%"
+SaveNameLastSecond := % User "|"
+Run, %ExeRun% --new-window --user-data-dir="%A_ScriptDir%\%BrowserFName%\%User%" "https://www.roblox.com/games/%GMID%",,, User
+SaveNameLastSecond .= User
+IHateScriptingThis.push(SaveNameLastSecond)
 }
 
 GetPageSource(url) { ; peak code bro
@@ -635,6 +657,46 @@ IfWinExist, i)%name%.* ahk_class AutoHotkey
 	
 SetTitleMatchMode 2
 }
+
+CheckingChromeAndRemovingIt() {
+global
+	if (SilentCacheRmovlal := 1) { 
+		for i, v in IHateScriptingThis
+		{
+			AccNameAlongWithWinID := strsplit(v, "|")
+			if (!winexist("ahk_pid " AccNameAlongWithWinID[2])) {
+				RemoveSingularCacheFile(AccNameAlongWithWinID[1])
+;				msgbox,0x40000,, % "Removed Cache for " AccNameAlongWithWinID[1]
+				IHateScriptingThis.removeat(i)
+			}
+		}
+	}
+}
+
+RemoveSingularCacheFile(TheStuffToClearCacheNameFileIDKBro) {
+global
+	Loop, Files, %A_ScriptDir%\%BrowserFName%\%TheStuffToClearCacheNameFileIDKBro%\*.*, D
+	{
+		if (A_LoopFileName != "Default") {
+			FileRemoveDir, %A_ScriptDir%\%BrowserFName%\%TheStuffToClearCacheNameFileIDKBro%\%A_LoopFileName%, 1
+		}
+	}
+	filedelete, %A_ScriptDir%\%BrowserFName%\%TheStuffToClearCacheNameFileIDKBro%\Default\Cache*.*
+	filedelete, %A_ScriptDir%\%BrowserFName%\%TheStuffToClearCacheNameFileIDKBro%\Default\Code Cache*.*
+	Loop, Files, %A_ScriptDir%\%BrowserFName%\%TheStuffToClearCacheNameFileIDKBro%\Default\Extensions\*.*, D
+	{
+		FileRemoveDir, %A_ScriptDir%\%BrowserFName%\%TheStuffToClearCacheNameFileIDKBro%\Default\Extensions\%A_LoopFileName%, 1
+	}
+	Loop, Files, %A_ScriptDir%\%BrowserFName%\%TheStuffToClearCacheNameFileIDKBro%\Default\Cache\*.*, D
+	{
+		FileRemoveDir, %A_ScriptDir%\%BrowserFName%\%TheStuffToClearCacheNameFileIDKBro%\Default\Cache\%A_LoopFileName%, 1
+	}
+	Loop, Files, %A_ScriptDir%\%BrowserFName%\%TheStuffToClearCacheNameFileIDKBro%\Default\Code Cache\*.*, D
+	{
+		FileRemoveDir, %A_ScriptDir%\%BrowserFName%\%TheStuffToClearCacheNameFileIDKBro%\Default\Code Cache\%A_LoopFileName%, 1
+	}
+}
+
 
 LicenseText() {
 return "

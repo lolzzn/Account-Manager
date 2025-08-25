@@ -1,4 +1,4 @@
-﻿; ==============================================================
+; ==============================================================
 ; OWNED BY LOLZZN
 ; WARNING: UNAUTHORIZED MODIFICATION IS PROHIBITED  
 ;  
@@ -87,14 +87,16 @@ gui, a:add, button, x40 y450 w130 GSettings, Settings
 
 gui, a:font, cFFFFFF s15 q2 w800, Tahoma
 gui, a:add, text, x215 y155, Account List
-gui, a:add, ListBox, x30 y210 w490 h180 vAccountList,
+gui, a:add, ListBox, x30 y210 w490 h180 vAccountList hwndItsTheAccountList,
+oldProc := DllCall("SetWindowLong" (A_PtrSize=8 ? "Ptr" : "Int"), "Ptr", ItsTheAccountList, "Int", -4, "Ptr", RegisterCallback("LB_WheelProc", "Fast"), "Ptr")
 gui, a:add, text, x275 y457 w60 vAmountAlt,
 
 gui, a:font, c0x196CD3 s10 q1 Underlined w400, Tahoma
 gui, a:add, text, x450 y466 GLinkClicked, White Sands
 
 gui, a:font, cWhite s7 q1 normal, Tahoma
-gui, a:add, Listbox, x325 y65 w200 h58 vGameIDList,
+gui, a:add, Listbox, x325 y65 w200 h58 vGameIDList hwndItsTheGameIDList,
+oldProc := DllCall("SetWindowLong" (A_PtrSize=8 ? "Ptr" : "Int"), "Ptr", ItsTheGameIDList, "Int", -4, "Ptr", RegisterCallback("LB_WheelProc", "Fast"), "Ptr")
 
 gosub UpdateAccountList
 gosub UpdateGameIDList
@@ -158,7 +160,10 @@ loop, parse, ACCCLIST, "|"
 		return
 	}
 }
-Run, %ExeRun% --new-window --user-data-dir="%A_ScriptDir%\%BrowserFName%\%AccountName%" "https://roblox.com/login"
+SaveNameLastSecond := % AccountName "|"
+Run, %ExeRun% --new-window --user-data-dir="%A_ScriptDir%\%BrowserFName%\%AccountName%" "https://roblox.com/login",,, User
+SaveNameLastSecond .= User
+IHateScriptingThis.push(SaveNameLastSecond)
 sleep 1000
 gosub UpdateAccountList
 return
@@ -666,7 +671,7 @@ global
 			AccNameAlongWithWinID := strsplit(v, "|")
 			if (!winexist("ahk_pid " AccNameAlongWithWinID[2])) {
 				RemoveSingularCacheFile(AccNameAlongWithWinID[1])
-;				msgbox,0x40000,, % "Removed Cache for " AccNameAlongWithWinID[1]
+				msgbox,0x40000,, % "Removed Cache for " AccNameAlongWithWinID[1]
 				IHateScriptingThis.removeat(i)
 			}
 		}
@@ -776,4 +781,32 @@ This software is created and owned by **Lolzzn** and is provided **for free use*
 **Email:** nilavian02@gmail.com
 **Official Website/Discord Server:** https://discord.gg/mangos
 )"
+}
+
+LB_WheelProc(hwnd, uMsg, wParam, lParam) {
+    static WM_MOUSEWHEEL := 0x20A
+    if (uMsg = WM_MOUSEWHEEL) {
+        ; wheel delta
+        delta := (wParam >> 16) & 0xFFFF
+        if (delta & 0x8000) ; signed fix
+            delta := -((~delta & 0xFFFF) + 1)
+
+        ; lines per notch (adjust as needed)
+        lines := (delta > 0 ? -3 : 3)
+
+        ; get top index
+        SendMessage, 0x18E, 0, 0,, ahk_id %hwnd% ; LB_GETTOPINDEX
+        top := ErrorLevel
+
+        ; set new top index immediately
+        newTop := top + lines
+        if (newTop < 0)
+            newTop := 0
+        SendMessage, 0x197, newTop, 0,, ahk_id %hwnd% ; LB_SETTOPINDEX
+
+        return 0  ; block Windows’ smooth scroll
+    }
+    ; call original WndProc for everything else
+    global oldProc
+    return DllCall("CallWindowProc", "Ptr", oldProc, "Ptr", hwnd, "UInt", uMsg, "Ptr", wParam, "Ptr", lParam, "Ptr")
 }

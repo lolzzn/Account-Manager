@@ -671,7 +671,7 @@ global
 			AccNameAlongWithWinID := strsplit(v, "|")
 			if (!winexist("ahk_pid " AccNameAlongWithWinID[2])) {
 				RemoveSingularCacheFile(AccNameAlongWithWinID[1])
-				msgbox,0x40000,, % "Removed Cache for " AccNameAlongWithWinID[1]
+;				msgbox,0x40000,, % "Removed Cache for " AccNameAlongWithWinID[1]
 				IHateScriptingThis.removeat(i)
 			}
 		}
